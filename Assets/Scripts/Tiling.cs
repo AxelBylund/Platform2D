@@ -41,21 +41,44 @@ public class Tiling : MonoBehaviour {
 
             // calculate the x position where the camera can see the edge of the sprite (element)
             float edgeVisiblePoisitionRight = (myTransform.position.x + spriteWidth / 2) - camHorizontalExtend;
-            float edgeVisiblePoisitionLeft = (myTransform.position.x - spriteWidth / 2) - camHorizontalExtend;
+            float edgeVisiblePoisitionLeft = (myTransform.position.x - spriteWidth / 2) + camHorizontalExtend;
 
+            // checking if we can see the edge of the element and then calling MakeNewBuddy if we can
             if (cam.transform.position.x >= edgeVisiblePoisitionRight - offsetX && hasARightBuddy == false)
             {
-
+                MakeNewBuddy(1);
+                hasARightBuddy = true;
             }
             else if (cam.transform.position.x <= edgeVisiblePoisitionLeft + offsetX && hasALeftBuddy == false)
             {
-
+                MakeNewBuddy(-1);
+                hasALeftBuddy = true;
             }
         }
 	}
 
+    // a function that creates a buddy on the side required
     void MakeNewBuddy (int rightOrLeft)
     {
+        // calculating the new position for our new buddy
+        Vector3 newPosition = new Vector3(myTransform.position.x + myTransform.localScale.x * spriteWidth * rightOrLeft, myTransform.position.y, myTransform.position.z);
+        Transform newBuddy = Instantiate (myTransform, newPosition, myTransform.rotation) as Transform;
+        
+        // if not tilable let's reverse the x size of our object to get rid of ugly seams
+        if (reverseScale == true)
+        {
+            newBuddy.localScale = new Vector3(newBuddy.localScale.x * -1, newBuddy.localScale.y, newBuddy.localScale.z);
+        }
 
+        newBuddy.parent = myTransform;
+        if (rightOrLeft > 0)
+        {
+            newBuddy.GetComponent<Tiling>().hasALeftBuddy = true;
+        }
+        else
+        {
+            newBuddy.GetComponent<Tiling>().hasARightBuddy = true;
+        }
     }
+
 }
