@@ -4,7 +4,17 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour {
 
-    public static GameMaster gm;
+	public float speedX;
+	public float jumpSpeedY;
+
+	/* check */
+	bool facingRight, Jumping;
+	float speed;
+
+	Animator anim;
+	Rigidbody2D rb;
+
+	public static GameMaster gm;
 
 	// Use this for initialization
 	void Start () {
@@ -12,9 +22,19 @@ public class GameMaster : MonoBehaviour {
         {
             gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         }
-    }
-    
-    public Transform playerPrefab;
+		anim = GetComponent<Animator>();
+		rb = GetComponent<Rigidbody2D>();
+		facingRight = true;
+	}
+
+	private void Update()
+	{
+		MovePlayer(speed);
+
+		if(Input)
+	}
+
+	 public Transform playerPrefab;
     public Transform spawnPoint;
     public int spawnDelay = 2;
 
